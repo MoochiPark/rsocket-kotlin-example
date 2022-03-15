@@ -52,30 +52,30 @@ val client = HttpClient(CIO) {
 fun main() = runBlocking {
     val rSocket: RSocket = client.rSocket("ws://localhost:9000/")
 
-//    println("Fire and Forget:")
-//    rSocket.fireAndForget(buildPayload { data("Fire and Forget data") })
-//
-//    println("Request-Response:")
-//    val response: Payload = rSocket.requestResponse(buildPayload { data("Request data") })
-//    println("Response data: ${response.data.readText()} ")
-//
-//    println("Request-Stream:")
-//    val stream: Flow<Payload> = rSocket.requestStream(buildPayload { data("Request-Stream data") })
-//    stream.collect { payload: Payload ->
-//        println(payload.data.readText())
-//    }
-//
-//    println("Request-Channel:")
-//    val channelStream: Flow<Payload> = rSocket.requestChannel(
-//        initPayload = Payload.Empty,
-//        payloads = flow {
-//            repeat(10) {
-//                emit(buildPayload { data("Channel request: $it") })
-//            }
-//        })
-//    channelStream.collect { payload: Payload ->
-//        println(payload.data.readText())
-//    }
+    println("Fire and Forget:")
+    rSocket.fireAndForget(buildPayload { data("Fire and Forget data") })
+
+    println("Request-Response:")
+    val response: Payload = rSocket.requestResponse(buildPayload { data("Request data") })
+    println("Response data: ${response.data.readText()} ")
+
+    println("Request-Stream:")
+    val stream: Flow<Payload> = rSocket.requestStream(buildPayload { data("Request-Stream data") })
+    stream.collect { payload: Payload ->
+        println(payload.data.readText())
+    }
+
+    println("Request-Channel:")
+    val channelStream: Flow<Payload> = rSocket.requestChannel(
+        initPayload = Payload.Empty,
+        payloads = flow {
+            repeat(10) {
+                emit(buildPayload { data("Channel request: $it") })
+            }
+        })
+    channelStream.collect { payload: Payload ->
+        println(payload.data.readText())
+    }
 
     println("Metadata-Push")
     rSocket.metadataPush(buildPacket {
